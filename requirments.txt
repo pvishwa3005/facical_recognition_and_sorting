@@ -1,0 +1,7 @@
+face_recognition
+face_recognition_models
+opencv-python
+scikit-learn
+Pillow
+PyQt6
+numpy
