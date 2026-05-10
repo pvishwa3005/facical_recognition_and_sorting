@@ -5,24 +5,44 @@ import shutil
 class Organizer:
 
     @staticmethod
-    def organize(grouped_faces, output_folder):
+    def organize(groups, output_dir):
 
-        output_folder = Path(output_folder)
+        output_dir = Path(output_dir)
 
-        output_folder.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(
+            exist_ok=True
+        )
 
-        for label, images in grouped_faces.items():
+        for label, faces in groups.items():
 
-            person_dir = output_folder / f"person_{label}"
+            person_dir = (
+                output_dir
+                / f"person_{label}"
+            )
 
-            person_dir.mkdir(exist_ok=True)
+            person_dir.mkdir(
+                exist_ok=True
+            )
 
-            for image_path in images:
+            copied = set()
 
-                destination = person_dir / image_path.name
+            for face in faces:
 
-                try:
-                    shutil.copy(image_path, destination)
+                image_path = (
+                    Path(face["image_path"])
+                )
 
-                except Exception as e:
-                    print(f"Copy failed: {e}")
+                if image_path in copied:
+                    continue
+
+                copied.add(image_path)
+
+                destination = (
+                    person_dir
+                    / image_path.name
+                )
+
+                shutil.copy(
+                    image_path,
+                    destination
+                )

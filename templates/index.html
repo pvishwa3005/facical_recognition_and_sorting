@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Face Sorter AI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="background-glow"></div>
+
+    <div class="container">
+
+        <div class="hero">
+
+            <h1>
+                Face Sorter AI
+            </h1>
+
+            <p>
+                Upload photos and
+                automatically group
+                people by face.
+            </p>
+
+        </div>
+
+        <div class="upload-card">
+
+            <form
+                action="/upload"
+                method="POST"
+                enctype="multipart/form-data"
+                id="uploadForm"
+            >
+
+                <label
+                    class="drop-zone"
+                    id="dropZone"
+                >
+
+                    <input
+                        type="file"
+                        name="photos"
+                        multiple
+                        required
+                        id="fileInput"
+                    >
+
+                    <div class="upload-content">
+
+                        <div class="upload-icon">
+                            ⬆
+                        </div>
+
+                        <h2>
+                            Drag & Drop Photos
+                        </h2>
+
+                        <p>
+                            or click to browse
+                        </p>
+
+                    </div>
+
+                </label>
+
+                <div
+                    class="preview-container"
+                    id="previewContainer"
+                ></div>
+
+                <div class="output-directory-section">
+
+                    <input
+                        type="text"
+                        name="output_dir"
+                        id="outputDir"
+                        placeholder="Select Output Directory"
+                        class="output-input"
+                        readonly
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="browse-btn"
+                        id="browseBtn"
+                    >
+                        Browse
+                    </button>
+
+                </div>
+
+                <input
+                    type="file"
+                    id="directoryPicker"
+                    webkitdirectory
+                    directory
+                    style="display: none;"
+                >
+
+                <button
+                    type="submit"
+                    class="upload-btn"
+                >
+                    Sort Faces
+                </button>
+
+            </form>
+
+        </div>
+
+        {% if groups %}
+
+        <div class="results-section">
+
+            <h2 class="results-title">
+                Sorted Faces
+            </h2>
+
+            {% for label, images in groups.items() %}
+
+            <div class="person-card">
+
+                <div class="person-header">
+
+                    <div class="avatar">
+                        {{ label }}
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Person {{ label }}
+                        </h3>
+
+                        <p>
+                            {{ images|length }}
+                            faces detected
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="image-grid">
+
+                    {% for face in images %}
+
+                    <div class="image-card">
+
+                        <img
+                            src="/face_previews/{{ face.preview }}"
+                            alt="Face Preview"
+                        >
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    ></script>
+
+</body>
+
+</html>
